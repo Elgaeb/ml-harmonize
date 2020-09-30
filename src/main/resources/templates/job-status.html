@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Job Status</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+          crossorigin="anonymous"/>
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+</head>
+<body>
+<header class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">MarkLogic Data Hub Job Explorer</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/harmonize}">Harmonize</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/jobs}">Jobs</a>
+            </li>
+        </ul>
+    </div>
+</header>
+<div class="container-fluid" th:if="${job}">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/jobs}">Jobs</a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="'Job ' + ${job.jobId}">12345</li>
+        </ol>
+    </nav>
+
+    <div class="row" th:if="${job}">
+        <div class="col-12">
+            <form>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="jobId">Job ID</label>
+                            <input type="text" readonly class="form-control-plaintext" id="jobId" th:value="${job.jobId}">
+                        </div>
+                    </div>
+                    <div class="d-sm-none w-100"></div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="flow">Flow Name</label>
+                            <input type="text" readonly class="form-control-plaintext" id="flow" th:value="${job.flow}">
+                        </div>
+                    </div>
+                    <div class="d-md-none w-100"></div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="user">User</label>
+                            <input type="text" readonly class="form-control-plaintext" id="user" th:value="${job.user}">
+                        </div>
+                    </div>
+                    <div class="d-sm-none d-md-block w-100"></div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="jobStatus">Status</label>
+                            <input type="text" readonly class="form-control-plaintext" id="jobStatus" th:value="${job.jobStatus}">
+                        </div>
+                    </div>
+                    <div class="d-md-none w-100"></div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="lastAttemptedStep">Last Attempted Step</label>
+                            <input type="text" readonly class="form-control-plaintext" id="lastAttemptedStep" th:value="${job.lastAttemptedStep}">
+                        </div>
+                    </div>
+                    <div class="d-sm-none w-100"></div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="lastCompletedStep">Last Completed Step</label>
+                            <input type="text" readonly class="form-control-plaintext" id="lastCompletedStep" th:value="${job.lastCompletedStep}">
+                        </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="timeStarted">Time Started</label>
+                            <input type="text" readonly class="form-control-plaintext" id="timeStarted" th:value="${#temporals.format(job.timeStarted, 'M/d/yyyy h:mm:ss a')}">
+                        </div>
+                    </div>
+                    <div class="d-sm-none w-100"></div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="timeEnded">Time Ended</label>
+                            <input type="text" readonly class="form-control-plaintext" id="timeEnded" th:value="${#temporals.format(job.timeEnded, 'M/d/yyyy h:mm:ss a')}">
+                        </div>
+                    </div>
+                    <div class="d-md-none w-100"></div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="jobDuration">Duration</label>
+                            <input type="text" readonly class="form-control-plaintext" id="jobDuration" th:value="${{job.jobDuration}}">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered table-striped table-light table-hover">
+                <thead>
+                <tr>
+                    <th>Step</th>
+                    <th>Name</th>
+                    <th>Success</th>
+                    <th>Status</th>
+                    <th>Successful Events</th>
+                    <th>Failed Events</th>
+                    <th>Total Events</th>
+                    <th>Successful Batches</th>
+                    <th>Failed Batches</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Duration</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="step : ${job.getStepResponses()}" th:class="${step.success or step.status.startsWith('running')} ? '' : 'table-danger'">
+                    <td><a th:href="'/stepStatus?jobId=' + ${job.jobId} + '&stepNumber=' + ${step.step}" th:text="${step.step}"></a></td>
+                    <td th:text="${step.stepName}"></td>
+                    <td th:text="${step.success}"></td>
+                    <td th:text="${step.status}"></td>
+                    <td th:text="${step.successfulEvents}"></td>
+                    <td th:text="${step.failedEvents}"></td>
+                    <td th:text="${step.totalEvents}"></td>
+                    <td th:text="${step.successfulBatches}"></td>
+                    <td th:text="${step.failedBatches}"></td>
+                    <td th:text="${{step.stepStartTime}}"></td>
+                    <td th:text="${{step.stepEndTime}}"></td>
+                    <td th:text="${{step.stepDuration}}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="container" th:unless="${job}">
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-warning" role="alert">
+                No job document was found for job <span th:text="${jobId}">12345</span>. This may be due to initialization not having completed yet.
+                If the job was just scheduled, you can try reloading this page.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</body>
+</html>

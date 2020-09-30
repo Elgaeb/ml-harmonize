@@ -1,13 +1,36 @@
-# Ignore Gradle project-specific cache directory
-.gradle
+# Ignore hiddenfiles by default
+.*
 
-# Ignore Gradle build output directory
-build
-installer.log
-.DS_Store
-.classpath
-.gitattributes
-.project
-.settings
-bin
+# Include specific hidden files
+!.*ignore
+!.*rc
+!.*rc.json
+!.editorconfig
+!.env
+!.gitattributes
+!.gitmodules
 
+# Build directories for various tools
+build/
+dist/
+dist-libs/
+target/
+coverage/
+out/
+bin/
+
+# IDE artifacts
+*.iml
+*.ipr
+
+# Miscellaneous files
+**.lock
+**.log*
+
+# Local files
+*-local*.properties
+
+*.war
+
+# QuickStart files
+entities.layout.json
