@@ -49,8 +49,9 @@ public class SSLConfigService {
         }
     }
 
-    private X509TrustManager makeDefaultTrustManager() throws NoSuchAlgorithmException {
+    private X509TrustManager makeDefaultTrustManager() throws NoSuchAlgorithmException, KeyStoreException {
         TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        trustManagerFactory.init((KeyStore) null);
         for (TrustManager trustManager : trustManagerFactory.getTrustManagers()) {
             if (trustManager instanceof X509TrustManager) {
                 return (X509TrustManager) trustManager;
