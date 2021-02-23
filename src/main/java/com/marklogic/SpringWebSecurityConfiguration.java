@@ -4,8 +4,6 @@ import com.marklogic.spring.security.CustomAuthenticationProvider;
 import com.marklogic.spring.security.PlainTextPasswordEncoder;
 import com.marklogic.spring.security.SecurityConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.StaticResourceLocation;
-import org.springframework.boot.autoconfigure.security.reactive.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

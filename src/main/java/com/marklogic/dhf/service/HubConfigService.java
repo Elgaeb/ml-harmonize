@@ -12,8 +12,13 @@ import org.springframework.stereotype.Component;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 @Component
 public class HubConfigService {
+    Logger logger = LoggerFactory.getLogger(HubConfigService.class);
 
     private final String host;
     private final boolean gateway;
@@ -69,6 +74,21 @@ public class HubConfigService {
         this.jobAuthMethod = jobAuthMethod;
 
         this.modulesDbName = modulesDbName;
+
+        logger.info("Host            : {}", host);
+        logger.info("Digest Auth     : {}", digestAuth);
+        logger.info("Gateway         : {}", gateway);
+        logger.info("Host            : {}", host);
+        logger.info("FINAL Database  : {}", finalDbName);
+        logger.info("FINAL Port      : {}", finalDbPort);
+        logger.info("FINAL Auth      : {}", finalAuthMethod);
+        logger.info("STAGING Database: {}", stagingDbName);
+        logger.info("STAGING Port    : {}", stagingDbPort);
+        logger.info("STAGING Auth    : {}", stagingAuthMethod);
+        logger.info("JOBS Database   : {}", jobDbName);
+        logger.info("JOBS Port       : {}", jobDbPort);
+        logger.info("JOBS Auth       : {}", jobAuthMethod);
+        logger.info("Modules DB      : {}", modulesDbName);
     }
 
     public HubConfig hubConfig(String username, String password) {

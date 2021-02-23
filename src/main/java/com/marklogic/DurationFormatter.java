@@ -4,13 +4,10 @@ import org.springframework.format.Formatter;
 
 import java.text.ParseException;
 import java.time.Duration;
-import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class DurationFormatter implements Formatter<Duration> {
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-
     @Override
     public Duration parse(String text, Locale locale) throws ParseException {
         return Duration.parse(text);

@@ -19,6 +19,9 @@ coverage/
 out/
 bin/
 
+# logs directory
+logs/
+
 # IDE artifacts
 *.iml
 *.ipr

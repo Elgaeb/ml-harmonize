@@ -80,6 +80,9 @@ public class DataHubService {
                 inputs.setSteps(steps);
             }
             inputs.setJobId(jobId);
+
+            logger.info("Running flow {} with jobId {}", flowName, jobId);
+
             response = flowRunner.runFlow(inputs);
         } else {
             logger.warn("runFlow missing parameters, flowName: " + flowName + "steps: " + steps);

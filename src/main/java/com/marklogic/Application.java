@@ -6,9 +6,13 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @SpringBootApplication
 @EnableCaching
 public class Application {
+    public static Logger logger = LoggerFactory.getLogger(Application.class);
 
 	@Bean
 	public Java8TimeDialect java8TimeDialect() {
@@ -17,7 +21,7 @@ public class Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
-		System.out.println("running...");
+		logger.info("running...");
 	}
 
 }
